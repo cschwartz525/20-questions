@@ -1,6 +1,7 @@
 import express from 'express';
-import { createServer } from "http";
-import { Server, Socket } from "socket.io";
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import configureSocket from './socket';
 
 const app = express();
 const server = createServer(app);
@@ -15,19 +16,7 @@ const { PORT = 3000 } = process.env;
 
 app.use(express.static('build'));
 
-io.on('connection', (socket: Socket): void => {
-    console.log('a user connected');
-
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-
-    socket.on('message', (message) => {
-        console.log('message', message);
-
-        socket.emit('message', { sender: 'Server', text: 'yo' });
-    });
-});
+configureSocket(io);
 
 server.listen(PORT, (): void => {
     console.log(`Server running on port ${PORT}`);
