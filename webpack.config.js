@@ -45,6 +45,10 @@ const client = {
 
 const server = {
     entry: './src/server/index.ts',
+    externals: {
+        bufferutil: 'bufferutil',
+        'utf-8-validate': 'utf-8-validate'
+    },
     mode: NODE_ENV,
     module: {
         rules: [

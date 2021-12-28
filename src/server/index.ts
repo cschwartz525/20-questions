@@ -1,15 +1,34 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import { createServer } from "http";
+import { Server, Socket } from "socket.io";
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST']
+    }
+});
 
 const { PORT = 3000 } = process.env;
 
 app.use(express.static('build'));
 
-app.get('/hello', (req: Request, res: Response) => {
-    res.send({ message: 'hello world' });
+io.on('connection', (socket: Socket): void => {
+    console.log('a user connected');
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+
+    socket.on('message', (message) => {
+        console.log('message', message);
+
+        socket.emit('message', { sender: 'Server', text: 'yo' });
+    });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, (): void => {
     console.log(`Server running on port ${PORT}`);
 });
