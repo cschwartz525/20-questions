@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { uuid } from 'uuidv4';
+import events from '../global/events';
 
 const activePlayers = {};
 const games = {};
@@ -23,6 +24,9 @@ const configureSocket = (io: Server) => {
                     // If there are no players left in the game, delete the game
                     if (newPlayers.length) {
                         games[gameId].players = newPlayers;
+
+                        // Publish a PLAYER_LEFT event to notify other clients
+                        io.sockets.emit(events.PLAYER_LEFT, games[gameId].players);
                     } else {
                         delete games[gameId];
                     }
@@ -38,16 +42,25 @@ const configureSocket = (io: Server) => {
             console.log('games', games);
         });
     
-        socket.on('CREATE_GAME', (data) => {
+        socket.on(events.CREATE_GAME, () => {
             const gameId = uuid();
-            const { name } = data;
 
-            games[gameId] = { players: [{ id: playerId, name }] };
-            activePlayers[playerId].games.push(gameId);
+            games[gameId] = { players: [] };
 
             console.log('Game created', gameId, games[gameId]);
     
-            socket.emit('GAME_CREATED', gameId);
+            socket.emit(events.GAME_CREATED, gameId);
+        });
+
+        socket.on(events.JOIN_GAME, (data) => {
+            const { gameId, name } = data;
+
+            games[gameId].players.push({ id: playerId, name });
+            activePlayers[playerId].games.push(gameId);
+
+            console.log(`Player ${playerId} (${name}) joined game ${gameId}`);
+
+            io.sockets.emit(events.PLAYER_JOINED, games[gameId].players);
         });
     });
 };

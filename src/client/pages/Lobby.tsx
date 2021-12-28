@@ -1,9 +1,9 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import events from '../../global/events';
 
 const Lobby = ({ socket }) => {
     const navigate = useNavigate();
-    const [name, setName] = useState('');
 
     useEffect(() => {
         const onGameCreated = (gameId) => {
@@ -11,20 +11,16 @@ const Lobby = ({ socket }) => {
         };
 
         if (socket) {
-            socket.on('GAME_CREATED', onGameCreated);
+            socket.on(events.GAME_CREATED, onGameCreated);
 
             return () => {
-                socket.off('GAME_CREATED', onGameCreated);
+                socket.off(events.GAME_CREATED, onGameCreated);
             };
         }
     }, [socket]);
 
     const createGame = (): void => {
-        socket.emit('CREATE_GAME', { name });
-    };
-
-    const onNameChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        setName(e.target.value);
+        socket.emit(events.CREATE_GAME);
     };
     
     return (
@@ -33,7 +29,6 @@ const Lobby = ({ socket }) => {
             <h2>The classic multiplayer guessing game</h2>
             <hr />
             <h3>Start New Game</h3>
-            <input onChange={onNameChange} placeholder='Enter your name' type='text' value={name} />
             <button onClick={createGame}>Create Game</button>
             <hr />
             <h3>Join Existing Game</h3>

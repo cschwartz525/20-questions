@@ -23,7 +23,7 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<Lobby socket={socket} />} />
-                <Route path='/game/:gameId' element={<Game />} />
+                <Route path='/game/:gameId' element={<Game socket={socket} />} />
             </Routes>
         </BrowserRouter>
     );
