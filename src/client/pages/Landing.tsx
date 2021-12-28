@@ -1,12 +1,13 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage = ({ socket }) => {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
 
     useEffect(() => {
         const onGameCreated = (gameId) => {
-            // TODO: Replace this with React Router, redirect to /game/:gameId
-            console.log('GAME_CREATED', gameId);
+            navigate(`/game/${gameId}`);
         };
 
         if (socket) {

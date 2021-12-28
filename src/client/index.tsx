@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { render } from 'react-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import io from 'socket.io-client';
 
+import Game from './pages/Game';
 import LandingPage from './pages/Landing';
 
 const App = () => {
@@ -18,7 +20,12 @@ const App = () => {
     }, [setSocket]);
     
     return (
-        <LandingPage socket={socket} />
+        <BrowserRouter>
+            <Routes>
+                <Route path='/' element={<LandingPage socket={socket} />} />
+                <Route path='/game/:gameId' element={<Game />} />
+            </Routes>
+        </BrowserRouter>
     );
 };
 

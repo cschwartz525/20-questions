@@ -1,5 +1,6 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { createServer } from 'http';
+import path from 'path';
 import { Server } from 'socket.io';
 import configureSocket from './socket';
 
@@ -15,6 +16,10 @@ const io = new Server(server, {
 const { PORT = 3000 } = process.env;
 
 app.use(express.static('build'));
+
+app.get('*', (req: Request, res: Response) =>{
+    res.sendFile(path.join(__dirname + '/index.html'));
+});
 
 configureSocket(io);
 
