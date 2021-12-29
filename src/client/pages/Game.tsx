@@ -36,11 +36,10 @@ const Game = ({ socket }) => {
             <h1>20 Questions</h1>
             <h2>Game ID - {gameId}</h2>
             <hr />
-            {
-                joined
-                    ? <PlayersList players={players} />
-                    : <JoinGameForm gameId={gameId} setJoined={setJoined} socket={socket} />
-            }
+            <div className='game-container'>
+                {!joined && <JoinGameForm gameId={gameId} setJoined={setJoined} socket={socket} />}
+                <PlayersList players={players} />
+            </div>
         </div>
     );
 };

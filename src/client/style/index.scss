@@ -1,5 +1,24 @@
-$body-color: black;
+.game-container {
+    display: flex;
+}
 
-body {
-    color: $body-color;
+.players-list {
+    margin-left: auto;
+    text-align: center;
+    width: 200px;
+
+    h3 {
+        margin: 5px auto;
+    }
+
+    ul {
+        border: 1px solid black;
+        margin: 0;
+        padding: 0;
+
+        li {
+            list-style: none;
+            padding: 5px 20px;
+        }
+    }
 }
