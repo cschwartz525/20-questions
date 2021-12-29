@@ -88,7 +88,7 @@ class DB {
                 // Publish a PLAYER_LEFT event to notify other clients
                 newPlayers.forEach(({ id }) => {
                     const { socket } = this.getActivePlayer(id);
-                    socket.emit(events.PLAYER_LEFT, newPlayers);
+                    socket.emit(events.PLAYER_LEFT, { id: playerId });
                 });
             } else {
                 this.deleteGame(gameId);
