@@ -10,17 +10,23 @@ const Game = ({ socket }) => {
     const [players, setPlayers] = useState([]);
 
     useEffect(() => {
-        const onPlayersUpdated = (newPlayers) => {
+        const onPlayerJoined = (player) => {
+            setPlayers([...players, player]);
+        };
+
+        const onPlayerLeft = (player) => {
+            const newPlayers = players.filter(({ id }) => id !== player.id);
+
             setPlayers(newPlayers);
         };
 
         if (socket) {
-            socket.on(events.PLAYER_JOINED, onPlayersUpdated);
-            socket.on(events.PLAYER_LEFT, onPlayersUpdated);
+            socket.on(events.PLAYER_JOINED, onPlayerJoined);
+            socket.on(events.PLAYER_LEFT, onPlayerLeft);
 
             return () => {
-                socket.off(events.PLAYER_JOINED, onPlayersUpdated);
-                socket.off(events.PLAYER_LEFT, onPlayersUpdated);
+                socket.off(events.PLAYER_JOINED, onPlayerJoined);
+                socket.off(events.PLAYER_LEFT, onPlayerLeft);
             };
         }
     }, [players, setPlayers, socket]);
