@@ -1,4 +1,5 @@
-const CopyPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
 const { NODE_ENV = 'production' } = process.env;
@@ -22,20 +23,29 @@ const client = {
                         ]
                     }
                 }
+            },
+            {
+                test: /\.scss$/i,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader'
+                ]
             }
         ]
     },
     output: {
         path: path.resolve(__dirname, 'build'),
-        filename: 'bundle.js',
+        publicPath: '/',
+        filename: 'bundle.[hash].js',
+        clean: true
     },
     plugins: [
-        new CopyPlugin({
-            patterns: [
-                { 
-                    from: path.resolve(__dirname, 'public')
-                }
-            ]
+        new MiniCssExtractPlugin({
+            filename: 'main.[hash].css'
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/client/index.html'
         })
     ],
     resolve: {

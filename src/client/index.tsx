@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import io from 'socket.io-client';
+import './style/index.scss';
 
 import Game from './pages/Game';
 import Lobby from './pages/Lobby';
