@@ -32,8 +32,8 @@ const Game = ({ socket }) => {
             <hr />
             {
                 joined
-                ? <PlayersList players={players} />
-                : <JoinGameForm gameId={gameId} setJoined={setJoined} socket={socket} />
+                    ? <PlayersList players={players} />
+                    : <JoinGameForm gameId={gameId} setJoined={setJoined} socket={socket} />
             }
         </div>
     );

@@ -18,7 +18,7 @@ const App = () => {
 
         return () => { newSocket.close() };
     }, [setSocket]);
-    
+
     return (
         <BrowserRouter>
             <Routes>

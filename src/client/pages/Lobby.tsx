@@ -17,12 +17,12 @@ const Lobby = ({ socket }) => {
                 socket.off(events.GAME_CREATED, onGameCreated);
             };
         }
-    }, [socket]);
+    }, [navigate, socket]);
 
     const createGame = (): void => {
         socket.emit(events.CREATE_GAME);
     };
-    
+
     return (
         <div>
             <h1>20 Questions</h1>

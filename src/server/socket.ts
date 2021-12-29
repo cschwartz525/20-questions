@@ -12,7 +12,7 @@ const configureSocket = (io: Server) => {
         activePlayers[playerId] = { games: [] };
 
         console.log('User connected', playerId);
-    
+
         socket.on('disconnect', () => {
             const gamesForPlayer = activePlayers[playerId].games;
 
@@ -41,14 +41,14 @@ const configureSocket = (io: Server) => {
             console.log('activePlayers', activePlayers);
             console.log('games', games);
         });
-    
+
         socket.on(events.CREATE_GAME, () => {
             const gameId = uuid();
 
             games[gameId] = { players: [] };
 
             console.log('Game created', gameId, games[gameId]);
-    
+
             socket.emit(events.GAME_CREATED, gameId);
         });
 

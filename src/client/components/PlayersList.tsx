@@ -4,7 +4,7 @@ const PlayersList = ({ players }) => {
     return (
         <div>
             <ul>
-                {players.map(({ name }) => <li>{name}</li>)}
+                {players.map(({ id, name }) => <li key={id}>{name}</li>)}
             </ul>
         </div>
     );
