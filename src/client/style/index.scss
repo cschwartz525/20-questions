@@ -1,5 +1,11 @@
+// Styles
 @import 'colors';
 @import 'fonts';
+@import 'margins';
+
+// Components
+@import 'buttons';
+@import 'inputs';
 
 body {
     background-color: $light-slate-grey;

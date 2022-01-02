@@ -15,7 +15,13 @@ const JoinGameForm = ({ gameId, setJoined, socket }) => {
 
     return (
         <div>
-            <input onChange={onNameChange} placeholder='Enter your name' type='text' value={name} />
+            <input
+                className='margin-bottom-small'
+                onChange={onNameChange}
+                placeholder='Enter your name'
+                type='text'
+                value={name}
+            />
             <button onClick={joinGame}>Join Game</button>
         </div>
     );

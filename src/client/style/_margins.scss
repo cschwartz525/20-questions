@@ -1,0 +1,13 @@
+.margin-bottom {
+    &-small {
+        margin-bottom: 6px;
+    }
+
+    &-medium {
+        margin-bottom: 12px;
+    }
+
+    &-large {
+        margin-bottom: 18px;
+    }
+}
