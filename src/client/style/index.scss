@@ -1,6 +1,9 @@
+@import 'colors';
 @import 'fonts';
 
 body {
+    background-color: $light-slate-grey;
+    color: $dark-slate-grey;
     font-family: 'Rubik', sans-serif, monospace;
 }
 
@@ -18,7 +21,7 @@ body {
     }
 
     ul {
-        border: 1px solid black;
+        border: 1px solid $dark-slate-grey;
         margin: 0;
         padding: 0;
 
