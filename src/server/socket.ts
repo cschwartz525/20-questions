@@ -38,6 +38,14 @@ const configureSocket = (io: Server) => {
 
             console.log(`Player ${playerId} (${name}) joined game ${gameId}`);
         });
+
+        socket.on(events.REQUEST_GAME_STATE, (data) =>{
+            const { gameId } = data;
+
+            const game = db.getGame(gameId);
+
+            socket.emit(events.GAME_STATE_ACKNOWLEDGED, game);
+        });
     });
 };
 

@@ -10,6 +10,12 @@ const Game = ({ socket }) => {
     const [players, setPlayers] = useState([]);
 
     useEffect(() => {
+        const onGameStateAcknowledged = (game) => {
+            const { players = [] } = game;
+
+            setPlayers(players);
+        };
+
         const onPlayerJoined = (player) => {
             setPlayers([...players, player]);
         };
@@ -21,15 +27,19 @@ const Game = ({ socket }) => {
         };
 
         if (socket) {
+            socket.on(events.GAME_STATE_ACKNOWLEDGED, onGameStateAcknowledged);
             socket.on(events.PLAYER_JOINED, onPlayerJoined);
             socket.on(events.PLAYER_LEFT, onPlayerLeft);
 
+            socket.emit(events.REQUEST_GAME_STATE, { gameId });
+
             return () => {
+                socket.off(events.GAME_STATE_ACKNOWLEDGED, onGameStateAcknowledged);
                 socket.off(events.PLAYER_JOINED, onPlayerJoined);
                 socket.off(events.PLAYER_LEFT, onPlayerLeft);
             };
         }
-    }, [players, setPlayers, socket]);
+    }, [gameId, players, setPlayers, socket]);
 
     return (
         <div>
