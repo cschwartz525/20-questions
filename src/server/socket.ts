@@ -15,6 +15,9 @@ const configureSocket = (io: Server) => {
             // Remove player from all games he / she was in
             gamesForPlayer.forEach(gameId => {
                 db.leaveGame(gameId, playerId);
+
+                // Publish a PLAYER_LEFT event to notify other clients
+                io.sockets.emit(events.PLAYER_LEFT, { gameId, playerId });
             });
 
             // Remove player from activePlayers
@@ -34,9 +37,15 @@ const configureSocket = (io: Server) => {
         socket.on(events.JOIN_GAME, (data) => {
             const { gameId, name } = data;
 
-            db.joinGame(gameId, playerId, name);
+            const newPlayer = db.joinGame(gameId, playerId, name);
 
             console.log(`Player ${playerId} (${name}) joined game ${gameId}`);
+
+            // Respond to the player who just joined with a PLAYER_JOINED event
+            socket.emit(events.PLAYER_JOINED, { gameId, player: { ...newPlayer, isMe: true } });
+
+            // Notify other players via a PLAYER_JOINED event
+            socket.broadcast.emit(events.PLAYER_JOINED, { gameId, player: { ...newPlayer, isMe: false } });
         });
 
         socket.on(events.REQUEST_GAME_STATE, (data) =>{

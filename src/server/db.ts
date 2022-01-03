@@ -1,6 +1,5 @@
 import { Socket } from 'socket.io';
 import { uuid } from 'uuidv4';
-import events from '../global/events';
 import type { Game } from '../global/types';
 
 class DB {
@@ -62,19 +61,9 @@ class DB {
         if (activePlayer && game) {
             game.players.push(newPlayer);
             activePlayer.games.push(gameId);
-
-            game.players.forEach(({ id }) => {
-                const { socket } = this.getActivePlayer(id);
-
-                if (id === playerId) {
-                    // Respond to the player who just joined with a PLAYER_JOINED event
-                    socket.emit(events.PLAYER_JOINED, { ...newPlayer, isMe: true });
-                } else {
-                    // Notify other players via a PLAYER_JOINED event
-                    socket.emit(events.PLAYER_JOINED, { ...newPlayer, isMe: false });
-                }
-            });
         }
+
+        return newPlayer;
     }
 
     leaveGame(gameId, playerId) {
@@ -86,12 +75,6 @@ class DB {
             // If there are no players left in the game, delete the game
             if (newPlayers.length) {
                 game.players = newPlayers;
-
-                // Publish a PLAYER_LEFT event to notify other clients
-                newPlayers.forEach(({ id }) => {
-                    const { socket } = this.getActivePlayer(id);
-                    socket.emit(events.PLAYER_LEFT, { id: playerId });
-                });
             } else {
                 this.deleteGame(gameId);
             }

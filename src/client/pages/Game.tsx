@@ -27,14 +27,18 @@ const Game = ({ socket }) => {
             setPlayers(players);
         };
 
-        const onPlayerJoined = (player) => {
-            setPlayers([...players, player]);
+        const onPlayerJoined = (data) => {
+            if (gameId === data?.gameId) {
+                setPlayers([...players, data?.player]);
+            }
         };
 
-        const onPlayerLeft = (player) => {
-            const newPlayers = players.filter(({ id }) => id !== player.id);
+        const onPlayerLeft = (data) => {
+            if (gameId === data?.gameId) {
+                const newPlayers = players.filter(({ id }) => id !== data?.playerId);
 
-            setPlayers(newPlayers);
+                setPlayers(newPlayers);
+            }
         };
 
         if (socket) {
