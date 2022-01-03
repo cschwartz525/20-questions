@@ -18,6 +18,8 @@ class DB {
         this.getActivePlayer = this.getActivePlayer.bind(this);
         this.getGame = this.getGame.bind(this);
         this.joinGame = this.joinGame.bind(this);
+        this.leaveGame = this.leaveGame.bind(this);
+        this.startGame = this.startGame.bind(this);
     }
 
     createActivePlayer(socket) {
@@ -94,6 +96,12 @@ class DB {
                 this.deleteGame(gameId);
             }
         }
+    }
+
+    startGame(gameId) {
+        const game = this.getGame(gameId);
+
+        game.startTime = Date.now();
     }
 
 }
