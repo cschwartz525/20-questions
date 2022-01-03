@@ -57,6 +57,7 @@ const Game = ({ socket }) => {
         }
     }, [
         gameId,
+        initialized,
         players,
         setIsInProgress,
         setPlayers,
