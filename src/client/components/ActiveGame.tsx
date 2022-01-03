@@ -1,8 +1,14 @@
 import React from 'react';
+import { Player } from '../../global/types';
 
-const ActiveGame = () => (
+type ActiveGameProps = {
+    guesser: Player;
+};
+
+const ActiveGame = ({ guesser }: ActiveGameProps) => (
     <div>
         <h3>Active Game</h3>
+        <h4>{guesser?.name} is guessing</h4>
     </div>
 );
 

@@ -1,8 +1,13 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Socket } from 'socket.io-client';
 import events from '../../global/events';
 
-const Lobby = ({ socket }) => {
+type LobbyPageProps = {
+    socket: Socket;
+};
+
+const LobbyPage = ({ socket }: LobbyPageProps) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -37,4 +42,4 @@ const Lobby = ({ socket }) => {
     );
 };
 
-export default Lobby;
+export default LobbyPage;

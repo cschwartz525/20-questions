@@ -59,11 +59,11 @@ const configureSocket = (io: Server) => {
         socket.on(events.START_GAME, (data) =>{
             const { gameId } = data;
 
-            db.startGame(gameId);
+            const game = db.startGame(gameId);
 
             console.log('Game started', gameId);
 
-            io.sockets.emit(events.GAME_STARTED, { gameId });
+            io.sockets.emit(events.GAME_STARTED, game);
         });
     });
 };

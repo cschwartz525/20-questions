@@ -1,17 +1,26 @@
 import React from 'react';
+import PlayersListItem from './PlayersListItem';
+import { Player } from '../../global/types';
 
-const PlayersList = ({ players }) => {
+type PlayersListProps = {
+    guesser?: Player;
+    players: Player[];
+};
+
+const PlayersList = ({ guesser, players }: PlayersListProps) => {
     return (
         <div className='players-list'>
             <h3>Players</h3>
             <ul>
                 {
                     players.length
-                        ? players.map(({ id, isMe, name }) => {
-                            const displayName = isMe ? `${name} (me)` : name;
-
-                            return <li key={id}>{displayName}</li>;
-                        })
+                        ? players.map(player => (
+                            <PlayersListItem
+                                isGuesser={guesser?.id === player?.id}
+                                key={player?.id}
+                                player={player}
+                            />
+                        ))
                         : <li>No players</li>
                 }
                 {}

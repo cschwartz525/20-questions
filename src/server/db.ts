@@ -32,7 +32,7 @@ class DB {
     createGame() {
         const gameId = uuid();
 
-        this.games[gameId] = { players: [] };
+        this.games[gameId] = { id: gameId, players: [] };
 
         return gameId;
     }
@@ -85,6 +85,12 @@ class DB {
         const game = this.getGame(gameId);
 
         game.startTime = Date.now();
+
+        const guesserIndex = Math.floor(Math.random() * game.players.length);
+
+        game.guesserId = game.players[guesserIndex].id;
+
+        return game;
     }
 
 }

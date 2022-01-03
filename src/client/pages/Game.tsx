@@ -4,36 +4,52 @@ import ActiveGame from '../components/ActiveGame';
 import JoinGameForm from '../components/JoinGameForm';
 import PlayersList from '../components/PlayersList';
 import events from '../../global/events';
+import { Game, Player } from '../../global/types';
+import { Socket } from 'socket.io-client';
 
-const Game = ({ socket }) => {
+type GamePageProps = {
+    socket: Socket;
+};
+
+const GamePage = ({ socket }: GamePageProps) => {
     const { gameId } = useParams();
+    const [guesser, setGuesser] = useState(null);
     const [initialized, setInitialized] = useState(false);
     const [isInProgress, setIsInProgress] = useState(false);
     const [joined, setJoined] = useState(false);
     const [players, setPlayers] = useState([]);
 
     useEffect(() => {
-        const onGameStarted = (data) => {
-            if (gameId === data?.gameId) {
+        const onGameStarted = (data: Game): void => {
+            if (gameId === data?.id) {
+                const guesser = players.find(({ id }) => id === data?.guesserId);
+
                 setIsInProgress(true);
+                setGuesser(guesser);
             }
         };
 
-        const onGameStateAcknowledged = (game) => {
-            const { endTime, players = [], startTime } = game;
+        const onGameStateAcknowledged = (game: Game): void => {
+            const { endTime, guesserId, players = [], startTime } = game;
             const currentTime = Date.now();
 
             setIsInProgress(!endTime && currentTime > startTime);
             setPlayers(players);
+
+            if (guesserId) {
+                const guesser = players.find(({ id }) => id === guesserId);
+
+                setGuesser(guesser);
+            }
         };
 
-        const onPlayerJoined = (data) => {
+        const onPlayerJoined = (data: { gameId: string; player: Player }): void => {
             if (gameId === data?.gameId) {
                 setPlayers([...players, data?.player]);
             }
         };
 
-        const onPlayerLeft = (data) => {
+        const onPlayerLeft = (data: { gameId: string; playerId: string }): void => {
             if (gameId === data?.gameId) {
                 const newPlayers = players.filter(({ id }) => id !== data?.playerId);
 
@@ -63,6 +79,7 @@ const Game = ({ socket }) => {
         gameId,
         initialized,
         players,
+        setGuesser,
         setIsInProgress,
         setPlayers,
         socket
@@ -80,14 +97,14 @@ const Game = ({ socket }) => {
             <h2>Game ID - {gameId}</h2>
             <hr />
             <div className='game-container'>
-                {joined && isInProgress && <ActiveGame />}
+                {joined && isInProgress && <ActiveGame guesser={guesser} />}
                 {joined && !isInProgress && <button onClick={startGame}>Start Game</button>}
                 {!joined && isInProgress && <h3>Game is in progress...</h3>}
                 {!joined && <JoinGameForm gameId={gameId} setJoined={setJoined} socket={socket} />}
-                <PlayersList players={players} />
+                <PlayersList guesser={guesser} players={players} />
             </div>
         </div>
     );
 };
 
-export default Game;
+export default GamePage;

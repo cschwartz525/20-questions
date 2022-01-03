@@ -1,7 +1,14 @@
 import React, { ChangeEvent, useState } from 'react';
+import { Socket } from 'socket.io-client';
 import events from '../../global/events';
 
-const JoinGameForm = ({ gameId, setJoined, socket }) => {
+type JoinGameFormProps = {
+    gameId: string;
+    setJoined: (joined: boolean) => void;
+    socket: Socket;
+};
+
+const JoinGameForm = ({ gameId, setJoined, socket }: JoinGameFormProps) => {
     const [name, setName] = useState('');
 
     const onNameChange = (e: ChangeEvent<HTMLInputElement>): void => {
