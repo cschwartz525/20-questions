@@ -26,6 +26,14 @@ const configureSocket = (io: Server) => {
             console.log('User disconnected', playerId);
         });
 
+        socket.on(events.ASK_QUESTION, (data) => {
+            const { gameId, question } = data;
+
+            db.askQuestion(gameId, question);
+
+            io.sockets.emit(events.QUESTION_ASKED, { gameId, question });
+        });
+
         socket.on(events.CREATE_GAME, () => {
             const gameId = db.createGame();
 

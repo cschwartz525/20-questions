@@ -12,6 +12,7 @@ class DB {
         this.activePlayers = {};
         this.games = {};
 
+        this.askQuestion = this.askQuestion.bind(this);
         this.createActivePlayer = this.createActivePlayer.bind(this);
         this.createGame = this.createGame.bind(this);
         this.deleteGame = this.deleteGame.bind(this);
@@ -20,6 +21,12 @@ class DB {
         this.joinGame = this.joinGame.bind(this);
         this.leaveGame = this.leaveGame.bind(this);
         this.startGame = this.startGame.bind(this);
+    }
+
+    askQuestion(gameId, question) {
+        const game = this.getGame(gameId);
+
+        game.currentQuestion = question;
     }
 
     createActivePlayer(socket) {

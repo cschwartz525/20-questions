@@ -14,6 +14,7 @@ type GamePageProps = {
 const GamePage = ({ socket }: GamePageProps) => {
     const { gameId } = useParams();
     const [answer, setAnswer] = useState(null);
+    const [currentQuestion, setCurrentQuestion] = useState('');
     const [guesser, setGuesser] = useState(null);
     const [initialized, setInitialized] = useState(false);
     const [isInProgress, setIsInProgress] = useState(false);
@@ -69,11 +70,18 @@ const GamePage = ({ socket }: GamePageProps) => {
             }
         };
 
+        const onQuestionAsked = (data: { gameId: string; question: string }): void => {
+            if (gameId === data?.gameId) {
+                setCurrentQuestion(data?.question);
+            }
+        };
+
         if (socket) {
             socket.on(events.GAME_STARTED, onGameStarted);
             socket.on(events.GAME_STATE_ACKNOWLEDGED, onGameStateAcknowledged);
             socket.on(events.PLAYER_JOINED, onPlayerJoined);
             socket.on(events.PLAYER_LEFT, onPlayerLeft);
+            socket.on(events.QUESTION_ASKED, onQuestionAsked);
 
             if (!initialized) {
                 socket.emit(events.REQUEST_GAME_STATE, { gameId });
@@ -85,6 +93,7 @@ const GamePage = ({ socket }: GamePageProps) => {
                 socket.off(events.GAME_STATE_ACKNOWLEDGED, onGameStateAcknowledged);
                 socket.off(events.PLAYER_JOINED, onPlayerJoined);
                 socket.off(events.PLAYER_LEFT, onPlayerLeft);
+                socket.off(events.QUESTION_ASKED, onQuestionAsked);
             };
         }
     }, [
@@ -109,11 +118,40 @@ const GamePage = ({ socket }: GamePageProps) => {
             <h2>Game ID - {gameId}</h2>
             <hr />
             <div className='game-container'>
-                {joined && isInProgress && <ActiveGame answer={answer} guesser={guesser} playerId={playerId} />}
-                {joined && !isInProgress && <button onClick={startGame}>Start Game</button>}
-                {!joined && isInProgress && <h3>Game is in progress...</h3>}
-                {!joined && <JoinGameForm gameId={gameId} setJoined={setJoined} socket={socket} />}
-                <PlayersList guesser={guesser} players={players} />
+                {
+                    joined &&
+                    isInProgress &&
+                    <ActiveGame
+                        answer={answer}
+                        currentQuestion={currentQuestion}
+                        gameId={gameId}
+                        guesser={guesser}
+                        playerId={playerId}
+                        socket={socket}
+                    />
+                }
+                {
+                    joined &&
+                    !isInProgress &&
+                    <button onClick={startGame}>Start Game</button>
+                }
+                {
+                    !joined &&
+                    isInProgress &&
+                    <h3>Game is in progress...</h3>
+                }
+                {
+                    !joined &&
+                    <JoinGameForm
+                        gameId={gameId}
+                        setJoined={setJoined}
+                        socket={socket}
+                    />
+                }
+                <PlayersList
+                    guesser={guesser}
+                    players={players}
+                />
             </div>
         </div>
     );
