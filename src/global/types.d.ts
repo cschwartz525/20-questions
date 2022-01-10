@@ -1,4 +1,5 @@
 export type Game = {
+    answer?: string;
     endTime?: number;
     guesserId?: string;
     id: string;

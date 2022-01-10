@@ -1,5 +1,6 @@
 import { Socket } from 'socket.io';
 import { uuid } from 'uuidv4';
+import data from './data.json';
 import type { Game } from '../global/types';
 
 class DB {
@@ -89,6 +90,11 @@ class DB {
         const guesserIndex = Math.floor(Math.random() * game.players.length);
 
         game.guesserId = game.players[guesserIndex].id;
+
+        const answerIndex = Math.floor(Math.random() * data.answers.length);
+        const answer = data.answers[answerIndex];
+
+        game.answer = answer;
 
         return game;
     }
