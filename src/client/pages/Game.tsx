@@ -4,7 +4,7 @@ import ActiveGame from '../components/ActiveGame';
 import JoinGameForm from '../components/JoinGameForm';
 import PlayersList from '../components/PlayersList';
 import events from '../../global/events';
-import { Game, Player } from '../../global/types';
+import { Game, Player, Question } from '../../global/types';
 import { Socket } from 'socket.io-client';
 
 type GamePageProps = {
@@ -14,6 +14,7 @@ type GamePageProps = {
 const GamePage = ({ socket }: GamePageProps) => {
     const { gameId } = useParams();
     const [answer, setAnswer] = useState(null);
+    const [answeredQuestions, setAnsweredQuestions] = useState(null);
     const [currentQuestion, setCurrentQuestion] = useState('');
     const [guesser, setGuesser] = useState(null);
     const [initialized, setInitialized] = useState(false);
@@ -32,11 +33,12 @@ const GamePage = ({ socket }: GamePageProps) => {
                 setPlayerId(me?.id);
                 setGuesser(guesser);
                 setAnswer(data.answer);
+                setAnsweredQuestions([]);
             }
         };
 
         const onGameStateAcknowledged = (game: Game): void => {
-            const { answer, endTime, guesserId, players = [], startTime } = game;
+            const { answer, answeredQuestions, endTime, guesserId, players = [], startTime } = game;
             const currentTime = Date.now();
             const me = players.find(player => player.isMe);
 
@@ -44,6 +46,7 @@ const GamePage = ({ socket }: GamePageProps) => {
             setPlayers(players);
             setPlayerId(me?.id);
             setAnswer(answer);
+            setAnsweredQuestions(answeredQuestions);
 
             if (guesserId) {
                 const guesser = players.find(({ id }) => id === guesserId);
@@ -70,6 +73,11 @@ const GamePage = ({ socket }: GamePageProps) => {
             }
         };
 
+        const onQuestionAnswered = (data: { gameId: string; answeredQuestions: Question[] }): void => {
+            setAnsweredQuestions(data.answeredQuestions);
+            setCurrentQuestion('');
+        };
+
         const onQuestionAsked = (data: { gameId: string; question: string }): void => {
             if (gameId === data?.gameId) {
                 setCurrentQuestion(data?.question);
@@ -81,6 +89,7 @@ const GamePage = ({ socket }: GamePageProps) => {
             socket.on(events.GAME_STATE_ACKNOWLEDGED, onGameStateAcknowledged);
             socket.on(events.PLAYER_JOINED, onPlayerJoined);
             socket.on(events.PLAYER_LEFT, onPlayerLeft);
+            socket.on(events.QUESTION_ANSWERED, onQuestionAnswered);
             socket.on(events.QUESTION_ASKED, onQuestionAsked);
 
             if (!initialized) {
@@ -93,6 +102,7 @@ const GamePage = ({ socket }: GamePageProps) => {
                 socket.off(events.GAME_STATE_ACKNOWLEDGED, onGameStateAcknowledged);
                 socket.off(events.PLAYER_JOINED, onPlayerJoined);
                 socket.off(events.PLAYER_LEFT, onPlayerLeft);
+                socket.off(events.QUESTION_ANSWERED, onQuestionAnswered);
                 socket.off(events.QUESTION_ASKED, onQuestionAsked);
             };
         }
@@ -123,6 +133,7 @@ const GamePage = ({ socket }: GamePageProps) => {
                     isInProgress &&
                     <ActiveGame
                         answer={answer}
+                        answeredQuestions={answeredQuestions}
                         currentQuestion={currentQuestion}
                         gameId={gameId}
                         guesser={guesser}

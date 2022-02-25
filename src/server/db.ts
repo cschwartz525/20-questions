@@ -12,6 +12,7 @@ class DB {
         this.activePlayers = {};
         this.games = {};
 
+        this.answerQuestion = this.answerQuestion.bind(this);
         this.askQuestion = this.askQuestion.bind(this);
         this.createActivePlayer = this.createActivePlayer.bind(this);
         this.createGame = this.createGame.bind(this);
@@ -21,6 +22,19 @@ class DB {
         this.joinGame = this.joinGame.bind(this);
         this.leaveGame = this.leaveGame.bind(this);
         this.startGame = this.startGame.bind(this);
+    }
+
+    answerQuestion(gameId, response) {
+        const game = this.getGame(gameId);
+
+        game.answeredQuestions.push({
+            question: game.currentQuestion,
+            answer: response
+        });
+
+        game.currentQuestion = '';
+
+        return game.answeredQuestions;
     }
 
     askQuestion(gameId, question) {
@@ -102,6 +116,8 @@ class DB {
         const answer = data.answers[answerIndex];
 
         game.answer = answer;
+
+        game.answeredQuestions = [];
 
         return game;
     }

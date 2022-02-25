@@ -1,11 +1,26 @@
 import React, { ChangeEvent, useState } from 'react';
+import { Socket } from 'socket.io-client';
+import PreviousQuestions from './PreviousQuestions';
 import events from '../../../global/events';
+import { Question } from '../../../global/types';
 
-const GuesserView = ({ currentQuestion, gameId, socket }) => {
+type GuesserViewProps = {
+    currentQuestion: string;
+    answeredQuestions: Question[];
+    gameId: string;
+    socket: Socket;
+};
+
+const GuesserView = ({
+    answeredQuestions,
+    currentQuestion,
+    gameId,
+    socket
+}: GuesserViewProps): JSX.Element => {
     const [question, setQuestion] = useState('');
 
     const askQuestion = () => {
-        socket.emit(events.ASK_QUESTION, { gameId, question })
+        socket.emit(events.ASK_QUESTION, { gameId, question });
     };
 
     const onQuestionChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -16,6 +31,7 @@ const GuesserView = ({ currentQuestion, gameId, socket }) => {
         <div>
             <h3>Active Game</h3>
             <h4>You are guessing</h4>
+            <PreviousQuestions answeredQuestions={answeredQuestions} />
             {
                 currentQuestion
                     ? <p>Question: {currentQuestion}</p>

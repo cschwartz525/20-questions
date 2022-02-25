@@ -1,11 +1,12 @@
 import React from 'react';
-import ParticipantView from './ParticipantView';
-import { Player } from '../../../global/types';
-import GuesserView from './GuesserView';
 import { Socket } from 'socket.io-client';
+import ParticipantView from './ParticipantView';
+import GuesserView from './GuesserView';
+import { Player, Question } from '../../../global/types';
 
 type ActiveGameProps = {
     answer?: string;
+    answeredQuestions?: Question[];
     currentQuestion?: string;
     gameId: string;
     guesser: Player;
@@ -15,6 +16,7 @@ type ActiveGameProps = {
 
 const ActiveGame = ({
     answer,
+    answeredQuestions,
     currentQuestion,
     gameId,
     guesser,
@@ -29,6 +31,7 @@ const ActiveGame = ({
 
     if (isGuesser) {
         return <GuesserView
+            answeredQuestions={answeredQuestions}
             currentQuestion={currentQuestion}
             gameId={gameId}
             socket={socket}
@@ -36,8 +39,11 @@ const ActiveGame = ({
     } else {
         return <ParticipantView
             answer={answer}
+            answeredQuestions={answeredQuestions}
             currentQuestion={currentQuestion}
+            gameId={gameId}
             guesser={guesser}
+            socket={socket}
         />;
     }
 };
