@@ -1,13 +1,60 @@
+$margin-small: 6px;
+$margin-medium: 12px;
+$margin-large: 18px;
+
+
 .margin-bottom {
     &-small {
-        margin-bottom: 6px;
+        margin-bottom: $margin-small;
     }
 
     &-medium {
-        margin-bottom: 12px;
+        margin-bottom: $margin-medium;
     }
 
     &-large {
-        margin-bottom: 18px;
+        margin-bottom: $margin-large;
+    }
+}
+
+.margin-top {
+    &-small {
+        margin-top: $margin-small;
+    }
+
+    &-medium {
+        margin-top: $margin-medium;
+    }
+
+    &-large {
+        margin-top: $margin-large;
+    }
+}
+
+.margin-right {
+    &-small {
+        margin-right: $margin-small;
+    }
+
+    &-medium {
+        margin-right: $margin-medium;
+    }
+
+    &-large {
+        margin-right: $margin-large;
+    }
+}
+
+.margin-left {
+    &-small {
+        margin-left: $margin-small;
+    }
+
+    &-medium {
+        margin-left: $margin-medium;
+    }
+
+    &-large {
+        margin-left: $margin-large;
     }
 }

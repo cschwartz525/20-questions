@@ -22,6 +22,7 @@ class DB {
         this.joinGame = this.joinGame.bind(this);
         this.leaveGame = this.leaveGame.bind(this);
         this.startGame = this.startGame.bind(this);
+        this.validateGuess = this.validateGuess.bind(this);
     }
 
     answerQuestion(gameId, response) {
@@ -120,6 +121,14 @@ class DB {
         game.answeredQuestions = [];
 
         return game;
+    }
+
+    validateGuess(gameId, guess) {
+        const { answer = '' } = this.getGame(gameId);
+
+        const isCorrect = guess.toUpperCase() === answer.toUpperCase();
+
+        return isCorrect;
     }
 
 }

@@ -8,11 +8,14 @@ type PreviousQuestionsProps = {
 const PreviousQuestions = ({ answeredQuestions }: PreviousQuestionsProps): JSX.Element => {
     if (answeredQuestions?.length) {
         return (
-            <ul>
-                {answeredQuestions.map((item, index) => (
-                    <li key={`question_${index}`}>{item.question}: {item.answer}</li>
-                ))}
-            </ul>
+            <div>
+                <h4>Previous Questions and Answers</h4>
+                <ul>
+                    {answeredQuestions.map((item, index) => (
+                        <li key={`question_${index}`}>{item.question}: {item.answer}</li>
+                    ))}
+                </ul>
+            </div>
         );
     }
 

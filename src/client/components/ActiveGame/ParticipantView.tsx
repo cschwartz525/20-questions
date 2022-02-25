@@ -36,7 +36,7 @@ const ParticipantView = ({
             {
                 currentQuestion &&
                 <div>
-                    <p>Question: {currentQuestion}</p>
+                    <p>Current Question: {currentQuestion}</p>
                     <button name='yes' onClick={onYesNoClick}>Yes</button>
                     <button name='no' onClick={onYesNoClick}>No</button>
                 </div>
