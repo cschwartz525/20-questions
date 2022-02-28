@@ -11,7 +11,7 @@ const App = () => {
     const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-        const newSocket = io('ws://localhost:3000');
+        const newSocket = io();
 
         newSocket.open();
 
