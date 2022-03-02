@@ -45,7 +45,8 @@ const client = {
             filename: 'main.[hash].css'
         }),
         new HtmlWebpackPlugin({
-            template: './src/client/index.html'
+            template: './src/client/index.html',
+            favicon: './src/client/assets/favicon.ico'
         })
     ],
     resolve: {
