@@ -146,6 +146,12 @@ const GamePage = ({ socket }: GamePageProps) => {
         }
     };
 
+    const restartGame = () => {
+        if (socket) {
+            socket.emit(events.RESTART_GAME, { gameId });
+        }
+    };
+
     return (
         <div>
             <h1>20 Questions</h1>
@@ -177,7 +183,7 @@ const GamePage = ({ socket }: GamePageProps) => {
                     isEnded &&
                     <div>
                         {results.map((line, index) => <p key={`line_${index}`}>{line}</p>)}
-                        <button onClick={console.log}>Play Again?</button>
+                        <button onClick={restartGame}>Play Again?</button>
                     </div>
                 }
                 {

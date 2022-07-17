@@ -72,6 +72,16 @@ const configureSocket = (io: Server) => {
             socket.emit(events.GAME_STATE_ACKNOWLEDGED, game);
         });
 
+        socket.on(events.RESTART_GAME, (data) => {
+            const { gameId } = data;
+
+            const game = db.restartGame(gameId);
+
+            console.log('New game started', gameId);
+
+            io.sockets.emit(events.GAME_STARTED, game);
+        });
+
         socket.on(events.START_GAME, (data) => {
             const { gameId } = data;
 
