@@ -72,6 +72,16 @@ const configureSocket = (io: Server) => {
             socket.emit(events.GAME_STATE_ACKNOWLEDGED, game);
         });
 
+        socket.on(events.RESTART_GAME, (data) => {
+            const { gameId } = data;
+
+            const game = db.restartGame(gameId);
+
+            console.log('New game started', gameId);
+
+            io.sockets.emit(events.GAME_STARTED, game);
+        });
+
         socket.on(events.START_GAME, (data) => {
             const { gameId } = data;
 
@@ -85,9 +95,13 @@ const configureSocket = (io: Server) => {
         socket.on(events.SUBMIT_GUESS, (data) => {
             const { gameId, guess } = data;
 
-            const isCorrect = db.validateGuess(gameId, guess);
+            const game = db.validateGuess(gameId, guess);
 
-            io.sockets.emit(events.GUESS_VALIDATED, { gameId, guess, isCorrect });
+            // Respond to the player who just guessed with a GUESS_VALIDATED event
+            socket.emit(events.GUESS_VALIDATED, { game, gameId, guess, isGuesser: true });
+
+            // Notify other players via a GUESS_VALIDATED event
+            socket.broadcast.emit(events.GUESS_VALIDATED, { game, gameId, guess, isGuesser: false });
         });
     });
 };

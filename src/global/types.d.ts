@@ -5,6 +5,7 @@ export type Game = {
     endTime?: number;
     guesserId?: string;
     id: string;
+    isWin?: boolean;
     players: Player[];
     startTime?: number;
 };

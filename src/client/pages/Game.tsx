@@ -18,10 +18,12 @@ const GamePage = ({ socket }: GamePageProps) => {
     const [currentQuestion, setCurrentQuestion] = useState('');
     const [guesser, setGuesser] = useState(null);
     const [initialized, setInitialized] = useState(false);
+    const [isEnded, setIsEnded] = useState(false);
     const [isInProgress, setIsInProgress] = useState(false);
     const [joined, setJoined] = useState(false);
-    const [playerId, setPlayerId] = useState(null);
+    const [playerId, setPlayerId] = useState('');
     const [players, setPlayers] = useState([]);
+    const [results, setResults] = useState([]);
 
     useEffect(() => {
         const onGameStarted = (data: Game): void => {
@@ -84,9 +86,31 @@ const GamePage = ({ socket }: GamePageProps) => {
             }
         };
 
+        const onGuessValidated = (data: { game: Game, gameId: string; guess: string, isGuesser: boolean }) => {
+            if (gameId === data?.gameId) {
+                const { game, guess, isGuesser } = data;
+                const guesser = players.find(player => player.id === game.guesserId);
+                const time = game.endTime - game.startTime;
+
+                const results = [];
+
+                results.push(`${guess} is ${game?.isWin ? 'correct' : 'incorrect'}`);
+                results.push(game?.isWin
+                    ? (isGuesser ? 'You won the game!' : `${guesser?.name} won the game!`)
+                    : (isGuesser ? 'You lost the game!' : `${guesser?.name} lost the game!`)
+                );
+                results.push(`Total Time: ${time / 1000} seconds`);
+
+                setResults(results);
+                setIsInProgress(false);
+                setIsEnded(true);
+            }
+        };
+
         if (socket) {
             socket.on(events.GAME_STARTED, onGameStarted);
             socket.on(events.GAME_STATE_ACKNOWLEDGED, onGameStateAcknowledged);
+            socket.on(events.GUESS_VALIDATED, onGuessValidated);
             socket.on(events.PLAYER_JOINED, onPlayerJoined);
             socket.on(events.PLAYER_LEFT, onPlayerLeft);
             socket.on(events.QUESTION_ANSWERED, onQuestionAnswered);
@@ -122,6 +146,12 @@ const GamePage = ({ socket }: GamePageProps) => {
         }
     };
 
+    const restartGame = () => {
+        if (socket) {
+            socket.emit(events.RESTART_GAME, { gameId });
+        }
+    };
+
     return (
         <div>
             <h1>20 Questions</h1>
@@ -144,7 +174,17 @@ const GamePage = ({ socket }: GamePageProps) => {
                 {
                     joined &&
                     !isInProgress &&
+                    !isEnded &&
                     <button onClick={startGame}>Start Game</button>
+                }
+                {
+                    joined &&
+                    !isInProgress &&
+                    isEnded &&
+                    <div>
+                        {results.map((line, index) => <p key={`line_${index}`}>{line}</p>)}
+                        <button onClick={restartGame}>Play Again?</button>
+                    </div>
                 }
                 {
                     !joined &&

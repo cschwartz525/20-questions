@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Socket } from 'socket.io-client';
 import PreviousQuestions from './PreviousQuestions';
 import events from '../../../global/events';
@@ -35,22 +35,6 @@ const GuesserView = ({
     const onGuessChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setGuess(e.target.value);
     };
-
-    const onGuessValidated = (data: { gameId: string; guess: string; isCorrect: boolean }) => {
-        // TODO: Display something to all players instead of only alerting the guesser
-        alert(`${data.guess} is ${data.isCorrect ? 'correct' : 'incorrect'}`);
-        setGuess('');
-    };
-
-    useEffect(() => {
-        if (socket) {
-            socket.on(events.GUESS_VALIDATED, onGuessValidated);
-
-            return () => {
-                socket.off(events.GUESS_VALIDATED, onGuessValidated);
-            };
-        }
-    }, [socket]);
 
     return (
         <div>

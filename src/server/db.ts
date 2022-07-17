@@ -68,6 +68,15 @@ class DB {
         delete this.games[gameId];
     }
 
+    endGame(gameId, isCorrect) {
+        const game = this.getGame(gameId);
+
+        game.endTime = Date.now();
+        game.isWin = isCorrect;
+
+        return game;
+    }
+
     getActivePlayer(playerId) {
         return this.activePlayers[playerId];
     }
@@ -104,6 +113,28 @@ class DB {
         }
     }
 
+    restartGame(gameId) {
+        const game = this.getGame(gameId);
+
+        game.endTime = null;
+        game.startTime = Date.now();
+
+        const guesserIndex = Math.floor(Math.random() * game.players.length);
+
+        game.guesserId = game.players[guesserIndex].id;
+
+        const answerIndex = Math.floor(Math.random() * data.answers.length);
+        const answer = data.answers[answerIndex];
+
+        game.answer = answer;
+
+        game.answeredQuestions = [];
+        game.currentQuestion = null;
+        game.isWin = null;
+
+        return game;
+    }
+
     startGame(gameId) {
         const game = this.getGame(gameId);
 
@@ -128,7 +159,7 @@ class DB {
 
         const isCorrect = guess.toUpperCase() === answer.toUpperCase();
 
-        return isCorrect;
+        return this.endGame(gameId, isCorrect);
     }
 
 }
