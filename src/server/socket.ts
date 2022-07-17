@@ -85,9 +85,13 @@ const configureSocket = (io: Server) => {
         socket.on(events.SUBMIT_GUESS, (data) => {
             const { gameId, guess } = data;
 
-            const isCorrect = db.validateGuess(gameId, guess);
+            const game = db.validateGuess(gameId, guess);
 
-            io.sockets.emit(events.GUESS_VALIDATED, { gameId, guess, isCorrect });
+            // Respond to the player who just guessed with a GUESS_VALIDATED event
+            socket.emit(events.GUESS_VALIDATED, { game, gameId, guess, isGuesser: true });
+
+            // Notify other players via a GUESS_VALIDATED event
+            socket.broadcast.emit(events.GUESS_VALIDATED, { game, gameId, guess, isGuesser: false });
         });
     });
 };

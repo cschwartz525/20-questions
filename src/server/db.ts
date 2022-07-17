@@ -68,6 +68,15 @@ class DB {
         delete this.games[gameId];
     }
 
+    endGame(gameId, isCorrect) {
+        const game = this.getGame(gameId);
+
+        game.endTime = Date.now();
+        game.isWin = isCorrect;
+
+        return game;
+    }
+
     getActivePlayer(playerId) {
         return this.activePlayers[playerId];
     }
@@ -128,7 +137,7 @@ class DB {
 
         const isCorrect = guess.toUpperCase() === answer.toUpperCase();
 
-        return isCorrect;
+        return this.endGame(gameId, isCorrect);
     }
 
 }
