@@ -33,10 +33,9 @@ const LobbyPage = ({ socket }: LobbyPageProps) => {
         <div id='lobby'>
             <Title />
             <h2>The classic multiplayer guessing game</h2>
-            <hr />
             <h3>Start New Game</h3>
             <button onClick={createGame}>Create Game</button>
-            <hr />
+            <h3>- OR -</h3>
             <h3>Join Existing Game</h3>
             <p>To join an ongoing game, enter the URL in the address bar</p>
         </div>
