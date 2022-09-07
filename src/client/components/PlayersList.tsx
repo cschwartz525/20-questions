@@ -9,7 +9,7 @@ type PlayersListProps = {
 
 const PlayersList = ({ guesser, players }: PlayersListProps) => {
     return (
-        <div className='players-list'>
+        <div id='players'>
             <h3>Players</h3>
             <ul>
                 {

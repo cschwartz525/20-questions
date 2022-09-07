@@ -1,0 +1,31 @@
+#players {
+    margin-left: auto;
+    text-align: center;
+    width: 200px;
+
+    h3 {
+        margin: 5px auto;
+    }
+
+    ul {
+        border: 1px solid $dark-slate-grey;
+        margin: 0;
+        padding: 0;
+
+        li {
+            list-style: none;
+            padding: 5px 20px;
+
+            &.guesser {
+                background-color: $green;
+                color: $white;
+                font-weight: bold;
+            }
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        display: none;
+        width: 100%;
+    }
+}
