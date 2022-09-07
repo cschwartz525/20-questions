@@ -7,13 +7,15 @@
 // Components
 @import 'buttons';
 @import 'inputs';
+@import 'text';
 @import 'game';
+@import 'lobby';
 @import 'mobile-toggle';
 @import 'players';
 
 body {
-    background-color: $light-slate-grey;
-    color: $dark-slate-grey;
+    background-color: $dark-slate-grey;
+    color: $white;
     font-family: 'Rubik', sans-serif, monospace;
 }
 

@@ -5,6 +5,7 @@ import ActiveGame from '../components/ActiveGame';
 import JoinGameForm from '../components/JoinGameForm';
 import MobileToggle from '../components/MobileToggle';
 import PlayersList from '../components/PlayersList';
+import Title from '../components/Title';
 import events from '../../global/events';
 import { Game, Player, Question } from '../../global/types';
 
@@ -165,9 +166,7 @@ const GamePage = ({ socket }: GamePageProps) => {
 
     return (
         <div>
-            <h1>20 Questions</h1>
-            <h2>Game ID - {gameId}</h2>
-            <hr />
+            <Title />
             <MobileToggle toggleView={toggleView} />
             <div id='game-container'>
                 <div id='game' className='visible-mobile'>
