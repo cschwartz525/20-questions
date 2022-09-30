@@ -165,7 +165,7 @@ const GamePage = ({ socket }: GamePageProps) => {
     };
 
     return (
-        <div>
+        <div id='main'>
             <Title />
             <MobileToggle toggleView={toggleView} />
             <div id='game-container'>

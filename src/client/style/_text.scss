@@ -24,6 +24,7 @@
 
 .title {
     font-size: 3em;
+    margin: 20px auto;
 
     span {
         animation: letter-shadow ease-in-out 5s infinite;
@@ -31,6 +32,6 @@
     }
 }
 
-h1, h2, h3, h4, h5, p {
+.text-centered {
     text-align: center;
 }

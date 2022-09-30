@@ -17,6 +17,7 @@ body {
     background-color: $dark-slate-grey;
     color: $white;
     font-family: 'Rubik', sans-serif, monospace;
+    margin: 0;
 }
 
 .visible-mobile {
@@ -25,7 +26,15 @@ body {
     }
 }
 
-#game-container {
+#main {
     display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#game-container {
+    border-top: 1px solid $white;
+    display: flex;
+    flex-grow: 1;
     justify-content: space-between;
 }

@@ -4,11 +4,12 @@
     width: 200px;
 
     h3 {
-        margin: 5px auto;
+        border-bottom: 1px solid $white;
+        margin: 0 auto;
+        padding: 10px 0;
     }
 
     ul {
-        border: 1px solid $dark-slate-grey;
         margin: 0;
         padding: 0;
 
@@ -27,5 +28,9 @@
     @media screen and (max-width: 480px) {
         display: none;
         width: 100%;
+    }
+
+    @media screen and (min-width: 481px) {
+        border-left: 1px solid $white;
     }
 }

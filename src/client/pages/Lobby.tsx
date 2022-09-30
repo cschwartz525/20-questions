@@ -30,7 +30,7 @@ const LobbyPage = ({ socket }: LobbyPageProps) => {
     };
 
     return (
-        <div id='lobby'>
+        <div id='lobby' className='text-centered'>
             <Title />
             <h2>The classic multiplayer guessing game</h2>
             <h3>Start New Game</h3>
