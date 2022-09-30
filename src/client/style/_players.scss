@@ -1,0 +1,36 @@
+#players {
+    margin-left: auto;
+    text-align: center;
+    width: 200px;
+
+    h3 {
+        border-bottom: 1px solid $white;
+        margin: 0 auto;
+        padding: 10px 0;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+
+        li {
+            list-style: none;
+            padding: 5px 20px;
+
+            &.guesser {
+                background-color: $green;
+                color: $white;
+                font-weight: bold;
+            }
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        display: none;
+        width: 100%;
+    }
+
+    @media screen and (min-width: 481px) {
+        border-left: 1px solid $white;
+    }
+}

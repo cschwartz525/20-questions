@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
+import Title from '../components/Title';
 import events from '../../global/events';
 
 type LobbyPageProps = {
@@ -29,13 +30,12 @@ const LobbyPage = ({ socket }: LobbyPageProps) => {
     };
 
     return (
-        <div>
-            <h1>20 Questions</h1>
+        <div id='lobby' className='text-centered'>
+            <Title />
             <h2>The classic multiplayer guessing game</h2>
-            <hr />
             <h3>Start New Game</h3>
             <button onClick={createGame}>Create Game</button>
-            <hr />
+            <h3>- OR -</h3>
             <h3>Join Existing Game</h3>
             <p>To join an ongoing game, enter the URL in the address bar</p>
         </div>

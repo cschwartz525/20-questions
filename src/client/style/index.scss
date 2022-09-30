@@ -7,41 +7,34 @@
 // Components
 @import 'buttons';
 @import 'inputs';
+@import 'text';
+@import 'game';
+@import 'lobby';
+@import 'mobile-toggle';
+@import 'players';
 
 body {
-    background-color: $light-slate-grey;
-    color: $dark-slate-grey;
+    background-color: $dark-slate-grey;
+    color: $white;
     font-family: 'Rubik', sans-serif, monospace;
+    margin: 0;
 }
 
-.game-container {
+.visible-mobile {
+    @media screen and (max-width: 480px) {
+        display: block !important;
+    }
+}
+
+#main {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
 }
 
-.players-list {
-    margin-left: auto;
-    text-align: center;
-    width: 200px;
-
-    h3 {
-        margin: 5px auto;
-    }
-
-    ul {
-        border: 1px solid $dark-slate-grey;
-        margin: 0;
-        padding: 0;
-
-        li {
-            list-style: none;
-            padding: 5px 20px;
-
-            &.guesser {
-                background-color: $green;
-                color: $white;
-                font-weight: bold;
-            }
-        }
-    }
+#game-container {
+    border-top: 1px solid $white;
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
 }

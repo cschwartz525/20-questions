@@ -1,0 +1,16 @@
+.mobile-toggle {
+    // Only display on small screen widths (mobile)
+    @media screen and (min-width: 481px) {
+        display: none;
+    }
+
+    display: flex;
+    margin-bottom: 12px;
+
+    button {
+        border-radius: 0;
+        background: transparent;
+        color: $white;
+        width: 50%;
+    }
+}

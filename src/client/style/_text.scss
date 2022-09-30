@@ -1,0 +1,37 @@
+@keyframes letter-shadow {
+    0% {
+        text-shadow: 2px 2px 6px #ff0000;
+    }
+    16.7% {
+        text-shadow: 2px 2px 6px #ffff00;
+    }
+    33.3% {
+        text-shadow: 2px 2px 6px #00ff00;
+    }
+    50% {
+        text-shadow: 2px 2px 6px #00ffff;
+    }
+    66.6% {
+        text-shadow: 2px 2px 6px #0000ff;
+    }
+    83.3% {
+        text-shadow: 2px 2px 6px #ff00ff;
+    }
+    100% {
+        text-shadow: 2px 2px 6px #ff0000;
+    }
+ }
+
+.title {
+    font-size: 3em;
+    margin: 20px auto;
+
+    span {
+        animation: letter-shadow ease-in-out 5s infinite;
+        color: $white;
+    }
+}
+
+.text-centered {
+    text-align: center;
+}
