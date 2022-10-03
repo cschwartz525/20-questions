@@ -1,14 +1,14 @@
 import React, { ChangeEvent, useState } from 'react';
-import { Socket } from 'socket.io-client';
+import { useDispatch } from 'react-redux';
 import events from '../../global/events';
 
 type JoinGameFormProps = {
     gameId: string;
     setJoined: (joined: boolean) => void;
-    socket: Socket;
 };
 
-const JoinGameForm = ({ gameId, setJoined, socket }: JoinGameFormProps) => {
+const JoinGameForm = ({ gameId, setJoined }: JoinGameFormProps) => {
+    const dispatch = useDispatch();
     const [name, setName] = useState('');
 
     const onNameChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -16,7 +16,7 @@ const JoinGameForm = ({ gameId, setJoined, socket }: JoinGameFormProps) => {
     };
 
     const joinGame = (): void => {
-        socket.emit(events.JOIN_GAME, { gameId, name });
+        dispatch({ type: events.JOIN_GAME, payload: { gameId, name } })
         setJoined(true);
     };
 

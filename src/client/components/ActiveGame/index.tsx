@@ -1,5 +1,4 @@
 import React from 'react';
-import { Socket } from 'socket.io-client';
 import ParticipantView from './ParticipantView';
 import GuesserView from './GuesserView';
 import { Player, Question } from '../../../global/types';
@@ -11,7 +10,6 @@ type ActiveGameProps = {
     gameId: string;
     guesser: Player;
     playerId?: string;
-    socket: Socket;
 };
 
 const ActiveGame = ({
@@ -20,8 +18,7 @@ const ActiveGame = ({
     currentQuestion,
     gameId,
     guesser,
-    playerId,
-    socket
+    playerId
 }: ActiveGameProps) => {
     if (!guesser) {
         return <></>;
@@ -34,7 +31,6 @@ const ActiveGame = ({
             answeredQuestions={answeredQuestions}
             currentQuestion={currentQuestion}
             gameId={gameId}
-            socket={socket}
         />;
     } else {
         return <ParticipantView
@@ -43,7 +39,6 @@ const ActiveGame = ({
             currentQuestion={currentQuestion}
             gameId={gameId}
             guesser={guesser}
-            socket={socket}
         />;
     }
 };

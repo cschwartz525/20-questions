@@ -47,7 +47,7 @@ const configureSocket = (io: Server) => {
 
             console.log('Game created', gameId);
 
-            socket.emit(events.GAME_CREATED, gameId);
+            socket.emit(events.GAME_CREATED, { gameId });
         });
 
         socket.on(events.JOIN_GAME, (data) => {

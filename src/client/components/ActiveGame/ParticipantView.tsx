@@ -1,5 +1,5 @@
 import React, { SyntheticEvent } from 'react';
-import { Socket } from 'socket.io-client';
+import { useDispatch } from 'react-redux';
 import PreviousQuestions from './PreviousQuestions';
 import events from '../../../global/events';
 import { Player, Question } from '../../../global/types';
@@ -10,7 +10,6 @@ type ActiveGameProps = {
     currentQuestion?: string;
     gameId: string;
     guesser: Player;
-    socket: Socket
 };
 
 const ParticipantView = ({
@@ -18,13 +17,14 @@ const ParticipantView = ({
     answeredQuestions,
     currentQuestion,
     gameId,
-    guesser,
-    socket
+    guesser
 }: ActiveGameProps) => {
+    const dispatch = useDispatch();
+
     const onYesNoClick = (e: SyntheticEvent<HTMLButtonElement>): void => {
         const response = e.currentTarget.name.toUpperCase();
 
-        socket.emit(events.ANSWER_QUESTION, { gameId, response });
+        dispatch({ type: events.ANSWER_QUESTION, payload: { gameId, response } })
     };
 
     return (

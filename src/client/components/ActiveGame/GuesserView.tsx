@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
-import { Socket } from 'socket.io-client';
+import { useDispatch } from 'react-redux';
 import PreviousQuestions from './PreviousQuestions';
 import events from '../../../global/events';
 import { Question } from '../../../global/types';
@@ -8,24 +8,23 @@ type GuesserViewProps = {
     currentQuestion: string;
     answeredQuestions: Question[];
     gameId: string;
-    socket: Socket;
 };
 
 const GuesserView = ({
     answeredQuestions,
     currentQuestion,
-    gameId,
-    socket
+    gameId
 }: GuesserViewProps): JSX.Element => {
+    const dispatch = useDispatch();
     const [question, setQuestion] = useState('');
     const [guess, setGuess] = useState('');
 
     const askQuestion = () => {
-        socket.emit(events.ASK_QUESTION, { gameId, question });
+        dispatch({ type: events.ASK_QUESTION, payload: { gameId, question } });
     };
 
     const submitGuess = () => {
-        socket.emit(events.SUBMIT_GUESS, { gameId, guess });
+        dispatch({ type: events.SUBMIT_GUESS, payload: { gameId, guess } })
     };
 
     const onQuestionChange = (e: ChangeEvent<HTMLInputElement>): void => {
