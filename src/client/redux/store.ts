@@ -1,7 +1,7 @@
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { socketMiddleware } from './middleware';
-import reducer from './reducer';
+import reducers from './reducers';
 import initialState from './state';
 
 const middlewares = [socketMiddleware];
@@ -11,4 +11,4 @@ const middlewareEnhancer = applyMiddleware(...middlewares);
 const enhancers = [middlewareEnhancer];
 const composedEnhancers = composeWithDevTools(...enhancers)
 
-export default createStore(reducer, initialState, composedEnhancers);
+export default createStore(reducers, initialState, composedEnhancers);
