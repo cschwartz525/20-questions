@@ -27,7 +27,7 @@ const gameStartedReducer = (state: State, action: Action): State =>  {
         return state;
     }
 
-    const { answer, answeredQuestions, guesserId, id, players = [], startTime } = action.payload;
+    const { answer, answeredQuestions, guesserId, startTime } = action.payload;
 
     return {
         ...state,
@@ -36,10 +36,8 @@ const gameStartedReducer = (state: State, action: Action): State =>  {
             answer,
             answeredQuestions,
             guesserId,
-            id,
             isEnded: false,
             isInProgress: true,
-            players,
             startTime,
             results: []
         }
