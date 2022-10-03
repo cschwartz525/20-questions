@@ -27,8 +27,6 @@ export const selectIsPlayerInGroup = (state: State, player: Player): boolean => 
 
     const isPlayerInGroup = players.filter(({ id }) => id === player.id).length > 0;
 
-    console.log('craig', isPlayerInGroup);
-
     return isPlayerInGroup;
 }
 
