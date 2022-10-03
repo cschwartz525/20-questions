@@ -1,6 +1,6 @@
 import { Dispatch } from 'react';
-import {  } from 'react-router';
 import { Middleware, MiddlewareAPI } from 'redux';
+import { Socket } from 'socket.io';
 import io from 'socket.io-client';
 import { Action } from './actions';
 import events from '../../global/events';
@@ -18,22 +18,13 @@ const getSocket = () => {
     return socket;
 }
 
-export const socketMiddleware: Middleware = (
-    store: MiddlewareAPI
-) => (
-    next: Dispatch<Action>
-) => (
-    action: Action
-) => {
-    const { dispatch, getState } = store;
-    const state = getState();
-    const socket = getSocket();
-
-    console.log('ACTION', action);
-    console.log('STATE', state);
-    console.log('SOCKET', socket);
-
-    // Initialize socket listeners if they have not already been initialized
+/**
+ * Initialize socket listeners if they have not already been initialized
+ *
+ * @param socket {Socket} socket.io connection
+ * @param dispatch {Dispatch<Action>} method used to dispatch redux actions
+ */
+const initializeListeners = (socket: Socket, dispatch: Dispatch<Action>): void => {
     if (!initialized) {
         socket.on(events.GAME_CREATED, (data) => {
             dispatch({ type: events.GAME_CREATED, payload: data });
@@ -69,8 +60,15 @@ export const socketMiddleware: Middleware = (
 
         initialized = true;
     }
+};
 
-    // Emit socket messages when certain actions are dispatched
+/**
+ * Emit socket messages when certain actions are dispatched
+ *
+ * @param socket {Socket} socket.io connection
+ * @param action {Action} the action that the middleware intercepted
+ */
+const handleEmitSocketMessages = (socket: Socket, action: Action) => {
     if (action.type === events.ANSWER_QUESTION) {
         socket.emit(events.ANSWER_QUESTION, action.payload);
     } else if (action.type === events.ASK_QUESTION) {
@@ -88,6 +86,21 @@ export const socketMiddleware: Middleware = (
     } else if (action.type === events.SUBMIT_GUESS) {
         socket.emit(events.SUBMIT_GUESS, action.payload);
     }
+}
+
+export const socketMiddleware: Middleware = (
+    store: MiddlewareAPI
+) => (
+    next: Dispatch<Action>
+) => (
+    action: Action
+) => {
+    const { dispatch } = store;
+    const socket = getSocket();
+
+    initializeListeners(socket, dispatch);
+
+    handleEmitSocketMessages(socket, action);
 
     return next(action);
 };
