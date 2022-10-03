@@ -1,9 +1,11 @@
+import { Game } from '../../global/types';
+
 export type State = {
-    players: any[]
+    game?: Game
 };
 
 const state: State = {
-    players: []
+    game: null
 };
 
 export default state;

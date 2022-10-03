@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { Socket } from 'socket.io-client';
 import ActiveGame from '../components/ActiveGame';
@@ -7,7 +8,7 @@ import MobileToggle from '../components/MobileToggle';
 import PlayersList from '../components/PlayersList';
 import Title from '../components/Title';
 import events from '../../global/events';
-import { Game, Player, Question } from '../../global/types';
+import { selectGame, selectGuesser, selectMe } from '../redux/selectors';
 
 type GamePageProps = {
     socket: Socket;
@@ -15,131 +16,33 @@ type GamePageProps = {
 
 const GamePage = ({ socket }: GamePageProps) => {
     const { gameId } = useParams();
-    const [answer, setAnswer] = useState(null);
-    const [answeredQuestions, setAnsweredQuestions] = useState(null);
-    const [currentQuestion, setCurrentQuestion] = useState('');
-    const [guesser, setGuesser] = useState(null);
     const [initialized, setInitialized] = useState(false);
-    const [isEnded, setIsEnded] = useState(false);
-    const [isInProgress, setIsInProgress] = useState(false);
     const [joined, setJoined] = useState(false);
-    const [playerId, setPlayerId] = useState('');
-    const [players, setPlayers] = useState([]);
-    const [results, setResults] = useState([]);
+
+    const {
+        answer,
+        answeredQuestions,
+        currentQuestion = '',
+        isEnded = false,
+        isInProgress = false,
+        players = [],
+        results = []
+    } = useSelector(selectGame) || {};
+    const me = useSelector(selectMe);
+    const guesser = useSelector(selectGuesser);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        const onGameStarted = (data: Game): void => {
-            if (gameId === data?.id) {
-                const guesser = players.find(({ id }) => id === data?.guesserId);
-                const me = players.find(player => player.isMe);
-
-                setIsInProgress(true);
-                setPlayerId(me?.id);
-                setGuesser(guesser);
-                setAnswer(data.answer);
-                setAnsweredQuestions([]);
-            }
-        };
-
-        const onGameStateAcknowledged = (game: Game): void => {
-            const { answer, answeredQuestions, endTime, guesserId, players = [], startTime } = game;
-            const currentTime = Date.now();
-            const me = players.find(player => player.isMe);
-
-            setIsInProgress(!endTime && currentTime > startTime);
-            setPlayers(players);
-            setPlayerId(me?.id);
-            setAnswer(answer);
-            setAnsweredQuestions(answeredQuestions);
-
-            if (guesserId) {
-                const guesser = players.find(({ id }) => id === guesserId);
-
-                setGuesser(guesser);
-            }
-        };
-
-        const onPlayerJoined = (data: { gameId: string; player: Player }): void => {
-            if (gameId === data?.gameId) {
-                setPlayers([...players, data?.player]);
-
-                const me = players.find(player => player.isMe);
-
-                setPlayerId(me?.id);
-            }
-        };
-
-        const onPlayerLeft = (data: { gameId: string; playerId: string }): void => {
-            if (gameId === data?.gameId) {
-                const newPlayers = players.filter(({ id }) => id !== data?.playerId);
-
-                setPlayers(newPlayers);
-            }
-        };
-
-        const onQuestionAnswered = (data: { gameId: string; answeredQuestions: Question[] }): void => {
-            setAnsweredQuestions(data.answeredQuestions);
-            setCurrentQuestion('');
-        };
-
-        const onQuestionAsked = (data: { gameId: string; question: string }): void => {
-            if (gameId === data?.gameId) {
-                setCurrentQuestion(data?.question);
-            }
-        };
-
-        const onGuessValidated = (data: { game: Game, gameId: string; guess: string, isGuesser: boolean }) => {
-            if (gameId === data?.gameId) {
-                const { game, guess, isGuesser } = data;
-                const guesser = players.find(player => player.id === game.guesserId);
-                const time = game.endTime - game.startTime;
-
-                const results = [];
-
-                results.push(`${guess} is ${game?.isWin ? 'correct' : 'incorrect'}`);
-                results.push(game?.isWin
-                    ? (isGuesser ? 'You won the game!' : `${guesser?.name} won the game!`)
-                    : (isGuesser ? 'You lost the game!' : `${guesser?.name} lost the game!`)
-                );
-                results.push(`Total Time: ${time / 1000} seconds`);
-
-                setResults(results);
-                setIsInProgress(false);
-                setIsEnded(true);
-            }
-        };
-
-        if (socket) {
-            socket.on(events.GAME_STARTED, onGameStarted);
-            socket.on(events.GAME_STATE_ACKNOWLEDGED, onGameStateAcknowledged);
-            socket.on(events.GUESS_VALIDATED, onGuessValidated);
-            socket.on(events.PLAYER_JOINED, onPlayerJoined);
-            socket.on(events.PLAYER_LEFT, onPlayerLeft);
-            socket.on(events.QUESTION_ANSWERED, onQuestionAnswered);
-            socket.on(events.QUESTION_ASKED, onQuestionAsked);
-
-            if (!initialized) {
-                socket.emit(events.REQUEST_GAME_STATE, { gameId });
-                setInitialized(true);
-            }
-
-            return () => {
-                socket.off(events.GAME_STARTED, onGameStarted);
-                socket.off(events.GAME_STATE_ACKNOWLEDGED, onGameStateAcknowledged);
-                socket.off(events.PLAYER_JOINED, onPlayerJoined);
-                socket.off(events.PLAYER_LEFT, onPlayerLeft);
-                socket.off(events.QUESTION_ANSWERED, onQuestionAnswered);
-                socket.off(events.QUESTION_ASKED, onQuestionAsked);
-            };
+        if (!initialized) {
+            dispatch({ type: 'REQUEST_GAME_STATE', payload: { gameId } });
+            setInitialized(true);
         }
     }, [
+        dispatch,
         gameId,
         initialized,
-        players,
-        setGuesser,
-        setIsInProgress,
-        setPlayers,
-        socket
+        setInitialized
     ]);
 
     const startGame = () => {
@@ -179,7 +82,7 @@ const GamePage = ({ socket }: GamePageProps) => {
                             currentQuestion={currentQuestion}
                             gameId={gameId}
                             guesser={guesser}
-                            playerId={playerId}
+                            playerId={me?.id}
                             socket={socket}
                         />
                     }

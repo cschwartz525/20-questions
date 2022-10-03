@@ -5,9 +5,12 @@ export type Game = {
     endTime?: number;
     guesserId?: string;
     id: string;
+    isEnded?: boolean;
+    isInProgress?: boolean;
     isWin?: boolean;
     players: Player[];
     startTime?: number;
+    results?: string[];
 };
 
 export type Player = {

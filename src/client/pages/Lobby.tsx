@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
 import Title from '../components/Title';
@@ -9,6 +10,7 @@ type LobbyPageProps = {
 };
 
 const LobbyPage = ({ socket }: LobbyPageProps) => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,6 +29,7 @@ const LobbyPage = ({ socket }: LobbyPageProps) => {
 
     const createGame = (): void => {
         socket.emit(events.CREATE_GAME);
+        dispatch({ type: 'CREATE_GAME' });
     };
 
     return (
