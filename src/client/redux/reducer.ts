@@ -1,6 +1,26 @@
 import { Action } from './actions';
 import { selectIsPlayerInGroup } from './selectors';
 import type { State } from './state';
+import events from '../../global/events';
+
+const gameCreatedReducer = (state: State, action: Action): State =>  {
+    if (!action.payload?.gameId) {
+        return state;
+    }
+
+    const { gameId } = action.payload;
+
+    return {
+        ...state,
+        game: {
+            ...state.game,
+            id: gameId,
+            isEnded: false,
+            isInProgress: false,
+            players: []
+        }
+    };
+};
 
 const gameStartedReducer = (state: State, action: Action): State =>  {
     if (!action.payload?.gameId || action.payload.gameId !== state.game?.id) {
@@ -164,25 +184,28 @@ const questionAskedReducer = (state: State, action: Action): State => {
 const reducer = (state: State, action: Action): State =>  {
     switch (action.type) {
 
-    case 'GAME_STARTED':
+    case events.GAME_CREATED:
+        return gameCreatedReducer(state, action);
+
+    case events.GAME_STARTED:
         return gameStartedReducer(state, action);
 
-    case 'GAME_STATE_ACKNOWLEDGED':
+    case events.GAME_STATE_ACKNOWLEDGED:
         return gameStateAcknowledgedReducer(state, action);
 
-    case 'GUESS_VALIDATED':
+    case events.GUESS_VALIDATED:
         return guessValidatedReducer(state, action);
 
-    case 'PLAYER_JOINED':
+    case events.PLAYER_JOINED:
         return playerJoinedReducer(state, action);
 
-    case 'PLAYER_LEFT':
+    case events.PLAYER_LEFT:
         return playerLeftReducer(state, action);
 
-    case 'QUESTION_ASKED':
+    case events.QUESTION_ASKED:
         return questionAskedReducer(state, action);
 
-    case 'QUESTION_ANSWERED':
+    case events.QUESTION_ANSWERED:
         return questionAnsweredReducer(state, action);
 
     default:

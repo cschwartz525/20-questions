@@ -35,7 +35,7 @@ const GamePage = ({ socket }: GamePageProps) => {
 
     useEffect(() => {
         if (!initialized) {
-            dispatch({ type: 'REQUEST_GAME_STATE', payload: { gameId } });
+            dispatch({ type: events.REQUEST_GAME_STATE, payload: { gameId } });
             setInitialized(true);
         }
     }, [
@@ -46,15 +46,11 @@ const GamePage = ({ socket }: GamePageProps) => {
     ]);
 
     const startGame = () => {
-        if (socket) {
-            socket.emit(events.START_GAME, { gameId });
-        }
+        dispatch({ type: events.START_GAME, payload: { gameId } })
     };
 
     const restartGame = () => {
-        if (socket) {
-            socket.emit(events.RESTART_GAME, { gameId });
-        }
+        dispatch({ type: events.RESTART_GAME, payload: { gameId } })
     };
 
     const toggleView = (view: string) => {

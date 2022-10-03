@@ -1,34 +1,21 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Socket } from 'socket.io-client';
 import Title from '../components/Title';
-import events from '../../global/events';
+import { selectGameId } from '../redux/selectors';
 
-type LobbyPageProps = {
-    socket: Socket;
-};
-
-const LobbyPage = ({ socket }: LobbyPageProps) => {
+const LobbyPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const gameId = useSelector(selectGameId);
 
     useEffect(() => {
-        const onGameCreated = (gameId) => {
+        if (gameId) {
             navigate(`/game/${gameId}`);
-        };
-
-        if (socket) {
-            socket.on(events.GAME_CREATED, onGameCreated);
-
-            return () => {
-                socket.off(events.GAME_CREATED, onGameCreated);
-            };
         }
-    }, [navigate, socket]);
+    }, [gameId, navigate]);
 
     const createGame = (): void => {
-        socket.emit(events.CREATE_GAME);
         dispatch({ type: 'CREATE_GAME' });
     };
 
