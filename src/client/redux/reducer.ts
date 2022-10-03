@@ -23,11 +23,11 @@ const gameCreatedReducer = (state: State, action: Action): State =>  {
 };
 
 const gameStartedReducer = (state: State, action: Action): State =>  {
-    if (!action.payload?.gameId || action.payload.gameId !== state.game?.id) {
+    if (!action.payload?.id || action.payload.id !== state.game?.id) {
         return state;
     }
 
-    const { answer, answeredQuestions, gameId, guesserId, players = [], startTime } = action.payload;
+    const { answer, answeredQuestions, guesserId, id, players = [], startTime } = action.payload;
 
     return {
         ...state,
@@ -36,7 +36,7 @@ const gameStartedReducer = (state: State, action: Action): State =>  {
             answer,
             answeredQuestions,
             guesserId,
-            id: gameId,
+            id,
             isEnded: false,
             isInProgress: true,
             players,

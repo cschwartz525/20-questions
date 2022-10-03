@@ -71,14 +71,22 @@ export const socketMiddleware: Middleware = (
     }
 
     // Emit socket messages when certain actions are dispatched
-    if (action.type === events.CREATE_GAME) {
+    if (action.type === events.ANSWER_QUESTION) {
+        socket.emit(events.ANSWER_QUESTION, action.payload);
+    } else if (action.type === events.ASK_QUESTION) {
+        socket.emit(events.ASK_QUESTION, action.payload);
+    } else if (action.type === events.CREATE_GAME) {
         socket.emit(events.CREATE_GAME);
+    } else if (action.type === events.JOIN_GAME) {
+        socket.emit(events.JOIN_GAME, action.payload);
     } else if (action.type === events.REQUEST_GAME_STATE) {
         socket.emit(events.REQUEST_GAME_STATE, { gameId: action.payload.gameId });
     } else if (action.type === events.RESTART_GAME) {
         socket.emit(events.RESTART_GAME, { gameId: action.payload.gameId });
     } else if (action.type === events.START_GAME) {
         socket.emit(events.START_GAME, { gameId: action.payload.gameId });
+    } else if (action.type === events.SUBMIT_GUESS) {
+        socket.emit(events.SUBMIT_GUESS, action.payload);
     }
 
     return next(action);

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { Socket } from 'socket.io-client';
 import ActiveGame from '../components/ActiveGame';
 import JoinGameForm from '../components/JoinGameForm';
 import MobileToggle from '../components/MobileToggle';
@@ -10,11 +9,7 @@ import Title from '../components/Title';
 import events from '../../global/events';
 import { selectGame, selectGuesser, selectMe } from '../redux/selectors';
 
-type GamePageProps = {
-    socket: Socket;
-};
-
-const GamePage = ({ socket }: GamePageProps) => {
+const GamePage = () => {
     const { gameId } = useParams();
     const [initialized, setInitialized] = useState(false);
     const [joined, setJoined] = useState(false);
@@ -79,7 +74,6 @@ const GamePage = ({ socket }: GamePageProps) => {
                             gameId={gameId}
                             guesser={guesser}
                             playerId={me?.id}
-                            socket={socket}
                         />
                     }
                     {
@@ -107,7 +101,6 @@ const GamePage = ({ socket }: GamePageProps) => {
                         <JoinGameForm
                             gameId={gameId}
                             setJoined={setJoined}
-                            socket={socket}
                         />
                     }
                 </div>
