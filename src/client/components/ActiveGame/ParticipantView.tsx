@@ -1,25 +1,19 @@
 import React, { SyntheticEvent } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PreviousQuestions from './PreviousQuestions';
 import events from '../../../global/events';
-import { Player, Question } from '../../../global/types';
+import { selectGame, selectGuesser } from '../../redux/selectors';
 
-type ActiveGameProps = {
-    answer: string;
-    answeredQuestions: Question[];
-    currentQuestion?: string;
-    gameId: string;
-    guesser: Player;
-};
-
-const ParticipantView = ({
-    answer,
-    answeredQuestions,
-    currentQuestion,
-    gameId,
-    guesser
-}: ActiveGameProps) => {
+const ParticipantView = () => {
     const dispatch = useDispatch();
+    const game = useSelector(selectGame);
+    const guesser = useSelector(selectGuesser);
+    const {
+        answer,
+        answeredQuestions,
+        currentQuestion,
+        id: gameId
+    } = game || {};
 
     const onYesNoClick = (e: SyntheticEvent<HTMLButtonElement>): void => {
         const response = e.currentTarget.name.toUpperCase();

@@ -1,13 +1,12 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PlayersListItem from './PlayersListItem';
-import { Player } from '../../global/types';
+import { selectGuesser, selectPlayers } from '../redux/selectors';
 
-type PlayersListProps = {
-    guesser?: Player;
-    players: Player[];
-};
+const PlayersList = () => {
+    const guesser = useSelector(selectGuesser);
+    const players = useSelector(selectPlayers);
 
-const PlayersList = ({ guesser, players }: PlayersListProps) => {
     return (
         <div id='players'>
             <h3>Players</h3>

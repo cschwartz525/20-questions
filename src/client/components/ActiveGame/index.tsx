@@ -1,45 +1,23 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import ParticipantView from './ParticipantView';
 import GuesserView from './GuesserView';
-import { Player, Question } from '../../../global/types';
+import { selectGuesser, selectMe } from '../../redux/selectors';
 
-type ActiveGameProps = {
-    answer?: string;
-    answeredQuestions?: Question[];
-    currentQuestion?: string;
-    gameId: string;
-    guesser: Player;
-    playerId?: string;
-};
+const ActiveGame = () => {
+    const guesser = useSelector(selectGuesser);
+    const me = useSelector(selectMe);
 
-const ActiveGame = ({
-    answer,
-    answeredQuestions,
-    currentQuestion,
-    gameId,
-    guesser,
-    playerId
-}: ActiveGameProps) => {
     if (!guesser) {
         return <></>;
     }
 
-    const isGuesser = guesser.id === playerId;
+    const isGuesser = guesser.id === me.id;
 
     if (isGuesser) {
-        return <GuesserView
-            answeredQuestions={answeredQuestions}
-            currentQuestion={currentQuestion}
-            gameId={gameId}
-        />;
+        return <GuesserView />;
     } else {
-        return <ParticipantView
-            answer={answer}
-            answeredQuestions={answeredQuestions}
-            currentQuestion={currentQuestion}
-            gameId={gameId}
-            guesser={guesser}
-        />;
+        return <ParticipantView />;
     }
 };
 

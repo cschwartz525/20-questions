@@ -6,27 +6,19 @@ import JoinGameForm from '../components/JoinGameForm';
 import MobileToggle from '../components/MobileToggle';
 import PlayersList from '../components/PlayersList';
 import Title from '../components/Title';
+import { selectGame, selectMe } from '../redux/selectors';
 import events from '../../global/events';
-import { selectGame, selectGuesser, selectMe } from '../redux/selectors';
 
 const GamePage = () => {
+    const dispatch = useDispatch();
     const { gameId } = useParams();
     const [initialized, setInitialized] = useState(false);
-    const [joined, setJoined] = useState(false);
-
     const {
-        answer,
-        answeredQuestions,
-        currentQuestion = '',
         isEnded = false,
         isInProgress = false,
-        players = [],
         results = []
     } = useSelector(selectGame) || {};
-    const me = useSelector(selectMe);
-    const guesser = useSelector(selectGuesser);
-
-    const dispatch = useDispatch();
+    const joined = !!useSelector(selectMe);
 
     useEffect(() => {
         if (!initialized) {
@@ -67,14 +59,7 @@ const GamePage = () => {
                     {
                         joined &&
                         isInProgress &&
-                        <ActiveGame
-                            answer={answer}
-                            answeredQuestions={answeredQuestions}
-                            currentQuestion={currentQuestion}
-                            gameId={gameId}
-                            guesser={guesser}
-                            playerId={me?.id}
-                        />
+                        <ActiveGame />
                     }
                     {
                         joined &&
@@ -98,16 +83,10 @@ const GamePage = () => {
                     }
                     {
                         !joined &&
-                        <JoinGameForm
-                            gameId={gameId}
-                            setJoined={setJoined}
-                        />
+                        <JoinGameForm />
                     }
                 </div>
-                <PlayersList
-                    guesser={guesser}
-                    players={players}
-                />
+                <PlayersList />
             </div>
         </div>
     );
