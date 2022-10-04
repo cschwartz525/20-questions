@@ -9,7 +9,7 @@ const GuesserView = (): JSX.Element => {
     const [question, setQuestion] = useState('');
     const [guess, setGuess] = useState('');
     const game = useSelector(selectGame);
-    const { answeredQuestions, currentQuestion, id: gameId } = game;
+    const { answeredQuestions, currentQuestion, id: gameId } = game || {};
 
     const askQuestion = () => {
         dispatch({ type: events.ASK_QUESTION, payload: { gameId, question } });

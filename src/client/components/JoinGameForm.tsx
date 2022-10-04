@@ -1,15 +1,12 @@
 import React, { ChangeEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectGameId } from '../redux/selectors';
 import events from '../../global/events';
 
-type JoinGameFormProps = {
-    gameId: string;
-    setJoined: (joined: boolean) => void;
-};
-
-const JoinGameForm = ({ gameId, setJoined }: JoinGameFormProps) => {
+const JoinGameForm = () => {
     const dispatch = useDispatch();
     const [name, setName] = useState('');
+    const gameId = useSelector(selectGameId);
 
     const onNameChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setName(e.target.value);
@@ -17,7 +14,6 @@ const JoinGameForm = ({ gameId, setJoined }: JoinGameFormProps) => {
 
     const joinGame = (): void => {
         dispatch({ type: events.JOIN_GAME, payload: { gameId, name } })
-        setJoined(true);
     };
 
     return (

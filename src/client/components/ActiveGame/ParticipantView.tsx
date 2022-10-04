@@ -13,7 +13,7 @@ const ParticipantView = () => {
         answeredQuestions,
         currentQuestion,
         id: gameId
-    } = game;
+    } = game || {};
 
     const onYesNoClick = (e: SyntheticEvent<HTMLButtonElement>): void => {
         const response = e.currentTarget.name.toUpperCase();

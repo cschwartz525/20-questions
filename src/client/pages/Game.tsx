@@ -6,23 +6,19 @@ import JoinGameForm from '../components/JoinGameForm';
 import MobileToggle from '../components/MobileToggle';
 import PlayersList from '../components/PlayersList';
 import Title from '../components/Title';
+import { selectGame, selectMe } from '../redux/selectors';
 import events from '../../global/events';
-import { selectGame, selectGuesser } from '../redux/selectors';
 
 const GamePage = () => {
+    const dispatch = useDispatch();
     const { gameId } = useParams();
     const [initialized, setInitialized] = useState(false);
-    const [joined, setJoined] = useState(false);
-
     const {
         isEnded = false,
         isInProgress = false,
-        players = [],
         results = []
     } = useSelector(selectGame) || {};
-    const guesser = useSelector(selectGuesser);
-
-    const dispatch = useDispatch();
+    const joined = !!useSelector(selectMe);
 
     useEffect(() => {
         if (!initialized) {
@@ -87,16 +83,10 @@ const GamePage = () => {
                     }
                     {
                         !joined &&
-                        <JoinGameForm
-                            gameId={gameId}
-                            setJoined={setJoined}
-                        />
+                        <JoinGameForm />
                     }
                 </div>
-                <PlayersList
-                    guesser={guesser}
-                    players={players}
-                />
+                <PlayersList />
             </div>
         </div>
     );
