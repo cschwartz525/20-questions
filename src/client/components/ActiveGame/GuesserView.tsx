@@ -1,23 +1,15 @@
 import React, { ChangeEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PreviousQuestions from './PreviousQuestions';
+import { selectGame } from '../../redux/selectors';
 import events from '../../../global/events';
-import { Question } from '../../../global/types';
 
-type GuesserViewProps = {
-    currentQuestion: string;
-    answeredQuestions: Question[];
-    gameId: string;
-};
-
-const GuesserView = ({
-    answeredQuestions,
-    currentQuestion,
-    gameId
-}: GuesserViewProps): JSX.Element => {
+const GuesserView = (): JSX.Element => {
     const dispatch = useDispatch();
     const [question, setQuestion] = useState('');
     const [guess, setGuess] = useState('');
+    const game = useSelector(selectGame);
+    const { answeredQuestions, currentQuestion, id: gameId } = game;
 
     const askQuestion = () => {
         dispatch({ type: events.ASK_QUESTION, payload: { gameId, question } });
