@@ -7,7 +7,7 @@ import MobileToggle from '../components/MobileToggle';
 import PlayersList from '../components/PlayersList';
 import Title from '../components/Title';
 import events from '../../global/events';
-import { selectGame, selectGuesser, selectMe } from '../redux/selectors';
+import { selectGame, selectGuesser } from '../redux/selectors';
 
 const GamePage = () => {
     const { gameId } = useParams();
@@ -15,15 +15,11 @@ const GamePage = () => {
     const [joined, setJoined] = useState(false);
 
     const {
-        answer,
-        answeredQuestions,
-        currentQuestion = '',
         isEnded = false,
         isInProgress = false,
         players = [],
         results = []
     } = useSelector(selectGame) || {};
-    const me = useSelector(selectMe);
     const guesser = useSelector(selectGuesser);
 
     const dispatch = useDispatch();
@@ -67,14 +63,7 @@ const GamePage = () => {
                     {
                         joined &&
                         isInProgress &&
-                        <ActiveGame
-                            answer={answer}
-                            answeredQuestions={answeredQuestions}
-                            currentQuestion={currentQuestion}
-                            gameId={gameId}
-                            guesser={guesser}
-                            playerId={me?.id}
-                        />
+                        <ActiveGame />
                     }
                     {
                         joined &&
