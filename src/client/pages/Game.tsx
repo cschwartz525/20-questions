@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import ActiveGame from '../components/ActiveGame';
+import InviteButton from '../components/InviteButton';
 import JoinGameForm from '../components/JoinGameForm';
 import MobileToggle from '../components/MobileToggle';
 import PlayersList from '../components/PlayersList';
@@ -65,7 +66,10 @@ const GamePage = () => {
                         joined &&
                         !isInProgress &&
                         !isEnded &&
-                        <button onClick={startGame}>Start Game</button>
+                        <>
+                            <InviteButton />
+                            <button onClick={startGame}>Start Game</button>
+                        </>
                     }
                     {
                         joined &&
