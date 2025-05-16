@@ -1,19 +1,5 @@
 .invite-button-container {
-    position: relative;
     margin: 10px 0;
-
-    .notification {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba($green, 0.9);
-        color: white;
-        padding: 8px 16px;
-        border-radius: 4px;
-        font-size: 14px;
-        margin-top: 8px;
-        animation: fadeIn 0.3s ease;
-    }
 }
 
 @keyframes fadeIn {

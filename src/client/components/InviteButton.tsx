@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Toast from './Toast';
 
 const InviteButton = () => {
     const [showNotification, setShowNotification] = useState(false);
@@ -8,21 +9,17 @@ const InviteButton = () => {
         try {
             await navigator.clipboard.writeText(gameUrl);
             setShowNotification(true);
-            setTimeout(() => setShowNotification(false), 2000);
+            setTimeout(() => setShowNotification(false), 3000);
         } catch (err) {
             console.error('Failed to copy game link:', err);
         }
     };
 
     return (
-        <div className="invite-button-container">
+        <>
             <button onClick={copyGameLink}>Invite Players</button>
-            {showNotification && (
-                <div className="notification">
-                    Game link copied to clipboard!
-                </div>
-            )}
-        </div>
+            {showNotification && <Toast message="Game link copied to clipboard!" />}
+        </>
     );
 };
 

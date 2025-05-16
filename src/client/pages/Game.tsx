@@ -66,10 +66,10 @@ const GamePage = () => {
                         joined &&
                         !isInProgress &&
                         !isEnded &&
-                        <>
+                        <div className='game-buttons'>
                             <InviteButton />
                             <button onClick={startGame}>Start Game</button>
-                        </>
+                        </div>
                     }
                     {
                         joined &&
