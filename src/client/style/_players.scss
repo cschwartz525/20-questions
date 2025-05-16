@@ -1,12 +1,16 @@
 #players {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0 12px 12px 0;
     margin-left: auto;
+    min-width: 200px;
+    padding: 20px 0;
     text-align: center;
-    width: 200px;
 
     h3 {
-        border-bottom: 1px solid $white;
-        margin: 0 auto;
-        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 0 auto 20px;
+        padding: 0 0 10px;
+        font-weight: 500;
     }
 
     ul {
@@ -15,12 +19,21 @@
 
         li {
             list-style: none;
-            padding: 5px 20px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.05);
+            }
 
             &.guesser {
-                background-color: $green;
+                background-color: rgba($green, 0.2);
                 color: $white;
-                font-weight: bold;
+                font-weight: 500;
+
+                &:hover {
+                    background-color: rgba($green, 0.3);
+                }
             }
         }
     }
@@ -28,6 +41,7 @@
     @media screen and (max-width: 480px) {
         display: none;
         width: 100%;
+        border-radius: 12px;
     }
 
     @media screen and (min-width: 481px) {
